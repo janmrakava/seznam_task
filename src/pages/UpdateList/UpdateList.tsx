@@ -2,7 +2,7 @@
 const UpdateList: React.FC = () => {
     return (
         <>
-        <h1>ShowList</h1>
+        <h1>Update List Page</h1>
         </>
     )
 }
