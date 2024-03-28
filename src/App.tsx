@@ -11,10 +11,10 @@ function App() {
       <Route index element={<Home />} />
 
       <Route path="createnew" element={<CreateNewList />} />
-      <Route path="updatelist" element={<UpdateList />} />
-      <Route path="showlist" element={<ShowList />} />
+      <Route path="updatelist/:id" element={<UpdateList />} />
+      <Route path="showlist/:id" element={<ShowList />} />
 
-      <Route path="*" element={<NotFound />} />
+      <Route path="/notfound" element={<NotFound />} />
     </Routes>
   );
 }

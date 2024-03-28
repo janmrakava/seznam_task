@@ -1,16 +1,26 @@
 import { useNavigate } from 'react-router-dom';
 import AppHeading from '../../components/AppHeading';
 import BreadCrumbNavigation from '../../components/BreadcrumbNavigation';
+import List from '../../components/List';
+import { RootState } from '../../store';
+import { useSelector } from 'react-redux';
+
+export interface IList {
+  id: string;
+  name: string;
+  items: string[];
+}
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
+  const lists = useSelector((state: RootState) => state.list);
   return (
     <div
       style={{
         display: 'flex',
         flexDirection: 'column',
-        gap: '30px',
         alignItems: 'flex-start',
+        gap: '30px',
         padding: '20px'
       }}>
       <AppHeading />
@@ -26,6 +36,9 @@ const Home: React.FC = () => {
         onClick={() => navigate('/createnew')}>
         Vytvořit nový seznam
       </button>
+      {lists.map((list, index) => {
+        return <List name={list.name} key={index} id={list.id} />;
+      })}
     </div>
   );
 };
