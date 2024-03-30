@@ -15,13 +15,20 @@ const listSlice = createSlice({
     createList: (state, action: PayloadAction<ListSlice>) => {
       state.push(action.payload);
     },
-    updateList: (state, action: PayloadAction<ListSlice>) => {
-      const { id, name, items } = action.payload;
+    updateNameList: (state, action: PayloadAction<{id: string, name: string}>) => {
+      const { id, name } = action.payload;
       const existingList = state.find(list => list.id === id);
       if (existingList) {
         existingList.name = name;
+      }
+    },
+    updateList: (state, action: PayloadAction<{id: String, items: string[]}>) => {
+      const {id, items} = action.payload;
+      const existingList = state.find(list => list.id === id);
+      if (existingList) {
         existingList.items = items;
       }
+
     },
     addItemToList: (state, action: PayloadAction<{ id: string; item: string }>) => {
       const { id, item } = action.payload;
@@ -44,6 +51,6 @@ const listSlice = createSlice({
   }
 });
 
-export const { createList, updateList,addItemToList,  deleteItemFromList, deleteList } = listSlice.actions;
+export const { createList, updateNameList, addItemToList,  updateList, deleteItemFromList, deleteList } = listSlice.actions;
 
 export default listSlice.reducer;

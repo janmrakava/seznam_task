@@ -18,7 +18,7 @@ const BreadCrumbNavigation: React.FC<INavigationProps> = ({ items }) => {
     );
   });
 
-  return <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>{navItems}</div>;
+  return <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>{navItems}</div>;
 };
 
 export default BreadCrumbNavigation;

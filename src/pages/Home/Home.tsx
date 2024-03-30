@@ -36,9 +36,13 @@ const Home: React.FC = () => {
         onClick={() => navigate('/createnew')}>
         Vytvořit nový seznam
       </button>
-      {lists.map((list, index) => {
-        return <List name={list.name} key={index} id={list.id} />;
-      })}
+      {lists.length !== 0 ? (
+        lists.map((list, index) => {
+          return <List name={list.name} key={index} id={list.id} />;
+        })
+      ) : (
+        <p>Žádný dostupný seznam</p>
+      )}
     </div>
   );
 };

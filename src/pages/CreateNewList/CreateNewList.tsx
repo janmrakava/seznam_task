@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { RootState } from '../../store';
 import { useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
+import { SuccesButton } from '../../styles/styled';
 
 const CreateNewList: React.FC = () => {
   const dispatch = useDispatch();
@@ -23,7 +24,7 @@ const CreateNewList: React.FC = () => {
   const handleSubmit = (event: React.FormEvent) => {
     event?.preventDefault();
     const listExist = lists.find((list) => list.name === listName);
-    if (listExist) {
+    if (listExist || listName.length === 0) {
       setShowErrorMessage(true);
     } else {
       const id = uuidv4();
@@ -45,8 +46,7 @@ const CreateNewList: React.FC = () => {
         gap: '30px',
         alignItems: 'flex-start',
         padding: '20px',
-        width: '100%',
-        height: '100%'
+        maxWidth: '600px'
       }}>
       <AppHeading />
       <BreadCrumbNavigation
@@ -69,17 +69,12 @@ const CreateNewList: React.FC = () => {
             autoFocus
           />
         </div>
-        {showErrorMessage && <p style={{ color: 'red' }}>Seznam se zadaným jménem již existuje</p>}
+        {showErrorMessage && <p style={{ color: 'red' }}>Zadaný název nelze použít</p>}
 
-        <button
-          style={{
-            padding: '10px 20px',
-            borderRadius: '10px',
-            border: '1px solid black',
-            background: 'none'
-          }}>
+        <SuccesButton type="submit">
+          <img src="/create.png" alt="Create Icon" style={{ width: '20px' }} />
           Vytvořit seznam
-        </button>
+        </SuccesButton>
       </form>
     </div>
   );

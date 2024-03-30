@@ -12,14 +12,23 @@ const ListItem: React.FC<IListItem> = ({ id, item }) => {
     dispatch(deleteItemFromList({ id, item }));
   };
   return (
-    <li style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-      {item}
+    <div
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        fontWeight: 'bold',
+        fontSize: '18px',
+        width: '200px',
+        justifyContent: 'space-between'
+      }}>
       <button
-        style={{ background: 'none', border: 'none' }}
+        style={{ background: 'none', border: 'none', cursor: 'pointer' }}
         onClick={() => handleDeleteItem(id, item)}>
         <img src="/close.png" alt="Delete icon" style={{ width: '20px' }} />
       </button>
-    </li>
+      {item}
+      <img src="/drag.png" alt="Drag and drop icon" style={{ width: '20px' }} />
+    </div>
   );
 };
 
