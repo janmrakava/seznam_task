@@ -19,7 +19,7 @@ export const DeleteButton = styled(SuccesButton)`
 export const DraggableItem = styled.div<{$isDragging: boolean; $isDragOver: boolean }>`
   padding: 10px;
   margin-bottom: 5px;
-  background-color: ${({ $isDragOver }) => ($isDragOver ? '#e0e0e0' : '#f0f0f0')};
+  background-color: ${({ $isDragOver }) => ($isDragOver ? '#e0e0e0' : '#fff')};
   border: 1px solid #ccc;
   cursor: grab;
   opacity: ${({ $isDragging }) => ($isDragging ? 0.5 : 1)};

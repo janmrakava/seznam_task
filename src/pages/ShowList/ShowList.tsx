@@ -36,12 +36,17 @@ const ShowList: React.FC = () => {
   const handleAddItem = (e: React.FormEvent): void => {
     e.preventDefault();
     const isItemInList = selectedList?.items.some((item) => item === newItem);
-    if (!isItemInList) {
+    if (!isItemInList && newItem.length > 0) {
       dispatch(addItemToList({ id: selectedList!.id, item: newItem }));
       setNewItem('');
     } else {
       setShowWarning(true);
     }
+  };
+
+  const handleChangeItem = (e: React.ChangeEvent<HTMLInputElement>, id: number) => {
+    const { value } = e.target;
+    console.log(id, value);
   };
 
   const dragItem = useRef<number | null>(null);
@@ -126,7 +131,12 @@ const ShowList: React.FC = () => {
                 onDragEnter={() => dragEnter(index)}
                 onDragEnd={drop}
                 defaultValue={item}>
-                <ListItem id={selectedList.id} item={item} key={index} />{' '}
+                <ListItem
+                  id={selectedList.id}
+                  item={item}
+                  key={index}
+                  handleChangeItem={handleChangeItem}
+                />{' '}
               </DraggableItem>
             );
           })}

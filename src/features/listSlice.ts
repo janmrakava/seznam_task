@@ -22,13 +22,12 @@ const listSlice = createSlice({
         existingList.name = name;
       }
     },
-    updateList: (state, action: PayloadAction<{id: String, items: string[]}>) => {
+    updateList: (state, action: PayloadAction<{id: string, items: string[]}>) => {
       const {id, items} = action.payload;
       const existingList = state.find(list => list.id === id);
       if (existingList) {
         existingList.items = items;
       }
-
     },
     addItemToList: (state, action: PayloadAction<{ id: string; item: string }>) => {
       const { id, item } = action.payload;
@@ -37,6 +36,18 @@ const listSlice = createSlice({
         existingList.items.push(item);
       }
     },  
+    updateItemInList: (state, action: PayloadAction<{id: string, oldItem: string, newItem: string}>) => {
+      const {id, oldItem, newItem} = action.payload;
+      const existingList = state.find(list => list.id === id);
+      if (existingList){
+        const itemIndex = existingList.items.findIndex(item => item === oldItem)
+        console.log(itemIndex)
+        if (itemIndex !== -1){ 
+          existingList.items[itemIndex] = newItem
+        }
+      }
+
+    },
     deleteItemFromList: (state, action: PayloadAction<{id: string, item: string}>) => {
       const {id, item} = action.payload;
       const existingList = state.find(list => list.id === id);
@@ -51,6 +62,6 @@ const listSlice = createSlice({
   }
 });
 
-export const { createList, updateNameList, addItemToList,  updateList, deleteItemFromList, deleteList } = listSlice.actions;
+export const { createList, updateNameList, addItemToList,  updateList, deleteItemFromList, deleteList, updateItemInList } = listSlice.actions;
 
 export default listSlice.reducer;
