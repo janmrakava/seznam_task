@@ -46,7 +46,6 @@ const listSlice = createSlice({
           existingList.items[itemIndex] = newItem
         }
       }
-
     },
     deleteItemFromList: (state, action: PayloadAction<{id: string, item: string}>) => {
       const {id, item} = action.payload;
