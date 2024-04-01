@@ -6,7 +6,8 @@ import { IList } from '../Home/Home';
 import AppHeading from '../../components/AppHeading';
 import BreadCrumbNavigation from '../../components/BreadcrumbNavigation';
 import { deleteList, updateNameList } from '../../features/listSlice';
-import { DeleteButton, SuccesButton } from '../../styles/styled';
+import { ButtonImage, DeleteButton, SuccesButton } from '../../styles/styled';
+import Snackbar from 'awesome-snackbar';
 
 const UpdateList: React.FC = () => {
   const { id } = useParams();
@@ -31,6 +32,7 @@ const UpdateList: React.FC = () => {
       setShowWarning(true);
     } else {
       dispatch(updateNameList({ id: selectedList!.id, name: newName }));
+      new Snackbar('Název změněn!', { position: 'top-center', timeout: 1000 });
     }
   };
   const handleDelete = (id: string): void => {
@@ -52,47 +54,54 @@ const UpdateList: React.FC = () => {
         display: 'flex',
         flexDirection: 'column',
         gap: '30px',
-        alignItems: 'flex-start',
-        padding: '20px',
-        maxWidth: '600px'
+        alignItems: 'center',
+        padding: '20px'
       }}>
-      <AppHeading />
-      <BreadCrumbNavigation
-        items={[
-          { to: '/', label: 'Nákupní seznamy', active: false },
-          {
-            to: `/updatelist/${id}`,
-            label: selectedList ? `Úprava seznamu "${selectedList.name}"` : 'Načítání...',
-            active: true
-          }
-        ]}
-      />
-      <h2>Úprava seznamu</h2>
-      <form
-        style={{ display: 'flex', flexDirection: 'column', gap: '20px', alignItems: 'center' }}
-        onSubmit={handleSubmit}>
-        <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
-          <label htmlFor="listName">Název seznamu</label>
-          <input
-            type="text"
-            name="newName"
-            onChange={(e) => handleChange(e)}
-            style={{ height: '30px', textIndent: '10px' }}
-            placeholder={selectedList?.name}
-            autoFocus
-          />
-        </div>
-        {showWarning && <p style={{ color: 'red' }}>Zadaný název nelze použít</p>}
+      <div style={{ display: 'flex', gap: '20px', flexDirection: 'column' }}>
+        <AppHeading />
+        <BreadCrumbNavigation
+          items={[
+            { to: '/', label: 'Nákupní seznamy', active: false },
+            {
+              to: `/updatelist/${id}`,
+              label: selectedList ? `Úprava seznamu "${selectedList.name}"` : 'Načítání...',
+              active: true
+            }
+          ]}
+        />
+        <h2>Úprava seznamu</h2>
+        <form
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '20px'
+          }}
+          onSubmit={handleSubmit}>
+          <div style={{ display: 'flex', gap: '20px', alignItems: 'center', width: '100%' }}>
+            <label htmlFor="listName" style={{ width: '30%' }}>
+              Název seznamu
+            </label>
+            <input
+              type="text"
+              name="newName"
+              onChange={(e) => handleChange(e)}
+              style={{ height: '30px', textIndent: '10px', width: '65%', fontSize: '18px' }}
+              placeholder={selectedList?.name}
+              autoFocus
+            />
+          </div>
+          {showWarning && <p style={{ color: 'red' }}>Zadaný název nelze použít</p>}
 
-        <SuccesButton type="submit">
-          <img src="/update.png" alt="Update icon" style={{ width: '20px' }} />
-          Upravit
-        </SuccesButton>
-        <DeleteButton onClick={() => handleDelete(selectedList!.id)}>
-          <img src="/delete.png" alt="Delete icon" style={{ width: '20px' }} />
-          Smazat
-        </DeleteButton>
-      </form>
+          <SuccesButton type="submit">
+            <ButtonImage src="/update.png" alt="Update icon" />
+            Upravit
+          </SuccesButton>
+          <DeleteButton onClick={() => handleDelete(selectedList!.id)}>
+            <ButtonImage src="/delete.png" alt="Delete icon" />
+            Smazat
+          </DeleteButton>
+        </form>
+      </div>
     </div>
   );
 };

@@ -7,7 +7,9 @@ import { useEffect, useRef, useState } from 'react';
 import { IList } from '../Home/Home';
 import { addItemToList, updateList } from '../../features/listSlice';
 import ListItem from '../../components/ListItem';
-import { DraggableItem } from '../../styles/styled';
+import { ButtonImage, DraggableItem, SuccesButton } from '../../styles/styled';
+
+import Snackbar from 'awesome-snackbar';
 
 const ShowList: React.FC = () => {
   const [selectedList, setSelectedList] = useState<IList>();
@@ -41,6 +43,10 @@ const ShowList: React.FC = () => {
     setShowAutoSuggest(true);
     setNewItem(value);
   };
+
+  useEffect(() => {
+    if (newItem === '') setShowAutoSuggest(false);
+  }, [newItem]);
   const handleAddItem = (e: React.FormEvent): void => {
     e.preventDefault();
     const isItemInList = selectedList?.items.some((item) => item === newItem);
@@ -48,6 +54,7 @@ const ShowList: React.FC = () => {
       setPreviousItems((prevItems) => [...prevItems, newItem]);
       dispatch(addItemToList({ id: selectedList!.id, item: newItem }));
       setNewItem('');
+      new Snackbar('Nový item přidán!', { position: 'top-center', timeout: 1000 });
     } else {
       setShowWarning(true);
     }
@@ -100,6 +107,8 @@ const ShowList: React.FC = () => {
     if (!isItemInList && item.length > 0) {
       dispatch(addItemToList({ id: selectedList!.id, item: item }));
       setNewItem('');
+    } else {
+      setShowWarning(true);
     }
   };
 
@@ -120,95 +129,103 @@ const ShowList: React.FC = () => {
         display: 'flex',
         flexDirection: 'column',
         gap: '30px',
-        alignItems: 'flex-start',
-        padding: '20px',
-        maxWidth: '600px'
+        alignItems: 'center',
+        padding: '20px'
       }}>
-      <AppHeading />
-      <BreadCrumbNavigation
-        items={[
-          { to: '/', label: 'Nákupní seznamy', active: false },
-          {
-            to: `/showlist/${id}`,
-            label: selectedList ? `Položky seznamu ${selectedList.name}` : 'Načítání...',
-            active: true
-          }
-        ]}
-      />
-      <h2>Položky seznamu</h2>
-      {showWarning && <p style={{ color: 'red' }}>Položka se již v seznamu nachází</p>}
-      <form onSubmit={handleAddItem}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '30px', height: '30px' }}>
-          <div style={{ display: 'inline-block', position: 'relative', height: '30px' }}>
-            <input
-              type="text"
-              style={{ height: '80%', textIndent: '10px' }}
-              value={newItem}
-              name="newItem"
-              onChange={handleChange}
-              autoFocus
-            />
+      <div style={{ display: 'flex', gap: '20px', flexDirection: 'column' }}>
+        <AppHeading />
+        <BreadCrumbNavigation
+          items={[
+            { to: '/', label: 'Nákupní seznamy', active: false },
+            {
+              to: `/showlist/${id}`,
+              label: selectedList ? `Položky seznamu ${selectedList.name}` : 'Načítání...',
+              active: true
+            }
+          ]}
+        />
+        <h2>Položky seznamu</h2>
+        {showWarning && <p style={{ color: 'red' }}>Položka se již v seznamu nachází</p>}
+        <form onSubmit={handleAddItem}>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '30px',
+              height: '30px',
+              width: '100%'
+            }}>
             <div
               style={{
-                border: '1px solid black',
-                position: 'absolute',
-                top: '100%',
-                left: '0',
-                width: '100%',
-                zIndex: '1',
-                background: '#fff'
+                display: 'inline-block',
+                position: 'relative'
               }}>
-              {showAutoSuggest
-                ? suggestedItems.map((item, index) => {
-                    return (
-                      <p
-                        key={index}
-                        style={{ padding: '10px' }}
-                        onClick={() => handleClickAutoSuggest(item)}>
-                        {item}
-                      </p>
-                    );
-                  })
-                : null}
+              <input
+                type="text"
+                style={{
+                  textIndent: '10px',
+                  fontSize: '18px'
+                }}
+                value={newItem}
+                placeholder="Nová položka"
+                name="newItem"
+                onChange={handleChange}
+                autoFocus
+              />
+              <div
+                style={{
+                  border: '1px solid black',
+                  position: 'absolute',
+                  top: '100%',
+                  left: '0',
+                  width: '100%',
+                  zIndex: '1',
+                  background: '#fff',
+                  display: showAutoSuggest ? 'block' : 'none'
+                }}>
+                {showAutoSuggest
+                  ? suggestedItems.map((item, index) => {
+                      return (
+                        <p
+                          key={index}
+                          style={{ padding: '10px' }}
+                          onClick={() => handleClickAutoSuggest(item)}>
+                          {item}
+                        </p>
+                      );
+                    })
+                  : null}
+              </div>
             </div>
+
+            <SuccesButton type="submit" style={{}}>
+              <ButtonImage src="/create.png" alt="Plus icon" />
+              Přidat položku
+            </SuccesButton>
           </div>
-
-          <button
-            type="submit"
-            style={{
-              height: '100%',
-              paddingLeft: '20px',
-              paddingRight: '20px',
-              borderRadius: '10px',
-              border: '1px solid black',
-              background: 'none'
-            }}>
-            Přidat položku
-          </button>
-        </div>
-      </form>
-
-      {selectedList?.items.length !== 0 ? (
-        <div>
-          {selectedList?.items.map((item, index) => {
-            return (
-              <DraggableItem
-                $isDragging={dragItem.current === index}
-                $isDragOver={dragOverItem.current === index}
-                draggable
-                key={index}
-                onDragStart={() => dragStart(index)}
-                onDragEnter={() => dragEnter(index)}
-                onDragEnd={drop}
-                defaultValue={item}>
-                <ListItem id={selectedList.id} item={item} key={index} />
-              </DraggableItem>
-            );
-          })}
-        </div>
-      ) : (
-        <p>Seznam je prázdný</p>
-      )}
+        </form>
+        {selectedList?.items.length !== 0 ? (
+          <div style={{}}>
+            {selectedList?.items.map((item, index) => {
+              return (
+                <DraggableItem
+                  $isDragging={dragItem.current === index}
+                  $isDragOver={dragOverItem.current === index}
+                  draggable
+                  key={index}
+                  onDragStart={() => dragStart(index)}
+                  onDragEnter={() => dragEnter(index)}
+                  onDragEnd={drop}
+                  defaultValue={item}>
+                  <ListItem id={selectedList.id} item={item} key={index} />
+                </DraggableItem>
+              );
+            })}
+          </div>
+        ) : (
+          <p>Seznam je prázdný</p>
+        )}
+      </div>
     </div>
   );
 };

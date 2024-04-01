@@ -41,7 +41,6 @@ const listSlice = createSlice({
       const existingList = state.find(list => list.id === id);
       if (existingList){
         const itemIndex = existingList.items.findIndex(item => item === oldItem)
-        console.log(itemIndex)
         if (itemIndex !== -1){ 
           existingList.items[itemIndex] = newItem
         }

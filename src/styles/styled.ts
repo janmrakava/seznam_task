@@ -22,5 +22,10 @@ export const DraggableItem = styled.div<{$isDragging: boolean; $isDragOver: bool
   background-color: ${({ $isDragOver }) => ($isDragOver ? '#e0e0e0' : '#fff')};
   border: 1px solid #ccc;
   cursor: grab;
+  width: 100%;
   opacity: ${({ $isDragging }) => ($isDragging ? 0.5 : 1)};
 `
+
+export const ButtonImage = styled.img`
+  width: 20px;
+` 

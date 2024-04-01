@@ -4,6 +4,7 @@ import BreadCrumbNavigation from '../../components/BreadcrumbNavigation';
 import List from '../../components/List';
 import { RootState } from '../../store';
 import { useSelector } from 'react-redux';
+import { ButtonImage } from '../../styles/styled';
 
 export interface IList {
   id: string;
@@ -19,30 +20,39 @@ const Home: React.FC = () => {
       style={{
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'flex-start',
         gap: '30px',
+        alignItems: 'center',
         padding: '20px'
       }}>
-      <AppHeading />
-      <BreadCrumbNavigation items={[{ to: '/', label: 'Nákupní seznamy', active: true }]} />
-      <button
-        style={{
-          width: 'auto',
-          padding: '10px 20px',
-          borderRadius: '10px',
-          border: '1px solid black',
-          background: 'none'
-        }}
-        onClick={() => navigate('/createnew')}>
-        Vytvořit nový seznam
-      </button>
-      {lists.length !== 0 ? (
-        lists.map((list, index) => {
-          return <List name={list.name} key={index} id={list.id} />;
-        })
-      ) : (
-        <p>Žádný dostupný seznam</p>
-      )}
+      <div style={{ display: 'flex', gap: '20px', flexDirection: 'column' }}>
+        <AppHeading />
+        <BreadCrumbNavigation items={[{ to: '/', label: 'Nákupní seznamy', active: false }]} />
+        <button
+          style={{
+            width: 'auto',
+            padding: '10px 20px',
+            borderRadius: '10px',
+            border: '1px solid black',
+            background: 'none',
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '10px'
+          }}
+          onClick={() => navigate('/createnew')}>
+          <ButtonImage src="/create.png" alt="Create icon" />
+          Vytvořit nový seznam
+        </button>
+        <h2>Moje seznamy</h2>
+        {lists.length !== 0 ? (
+          lists.map((list, index) => {
+            return <List name={list.name} key={index} id={list.id} />;
+          })
+        ) : (
+          <p>Žádný dostupný seznam</p>
+        )}
+      </div>
     </div>
   );
 };
